@@ -10,9 +10,9 @@ def get_quadratic_obj(x, a, b):
 
 
 def get_quadratic_params(dim):
-    a = np.random.random((dim, dim))
+    a = tf.constant(np.random.random((dim, dim)))
     a = a @ a.T
-    b = np.random.random(dim)
+    b = tf.constant(np.random.random(dim))
 
     x = np.random.random(dim)
 
@@ -60,7 +60,8 @@ def get_norm_clustering_mstep_mat(x, mu_vec, sigma_vec, pi_vec, e_z):
     return ll_mat + prior_mat
 
 def get_norm_clustering_mstep(x, mu_vec, sigma_vec, pi_vec, e_z):
-    return tf.reduce_sum(get_norm_clustering_mstep_mat(x, mu_vec, sigma_vec, pi_vec, e_z))
+    return tf.reduce_sum(
+        get_norm_clustering_mstep_mat(x, mu_vec, sigma_vec, pi_vec, e_z))
 
 
 def get_norm_cluster_params(num_clusters, num_obs):
@@ -93,7 +94,8 @@ def get_logistic_ll(y, x_mat, theta):
 
 
 def get_logistic_params(num_obs, dim):
-    x_mat = np.hstack([ np.ones((num_obs, 1)), np.random.random((num_obs, dim - 1)) ])
+    x_mat = np.hstack([ np.ones((num_obs, 1)),
+                        np.random.random((num_obs, dim - 1)) ])
     theta = np.random.random(dim) / (10 * dim)
     y = (np.random.random(num_obs) < x_mat @ theta).astype(np.float64)
     return theta, x_mat, y
