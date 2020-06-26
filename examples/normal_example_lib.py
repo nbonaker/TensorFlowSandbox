@@ -1,6 +1,8 @@
 import numpy as np
 import tensorflow as tf
 
+
+@tf.function
 def normal_lp_suff(mu, mu2, tau, log_tau, xsum, x2sum, num_obs):
     mu_dim = len(xsum)
     quad_term = \
@@ -13,6 +15,7 @@ def normal_lp_suff(mu, mu2, tau, log_tau, xsum, x2sum, num_obs):
     return lp
 
 
+@tf.function
 def normal_lp(par, data):
     mu = tf.convert_to_tensor(par['mu'], dtype=tf.float64)
     tau = tf.convert_to_tensor(par['tau'], dtype=tf.float64)
@@ -23,11 +26,15 @@ def normal_lp(par, data):
         log_tau=tf.math.log(tau),
         **data)
 
+
+@tf.function
 def flatten_par(par):
     tau = tf.convert_to_tensor(par['tau'], dtype=tf.float64)
     tau = tf.reshape(tau, (1, ))
     return tf.concat([ par['mu'], tf.math.log(tau) ], axis=0)
 
+
+@tf.function
 def fold_par(par_flat):
     par_flat = tf.convert_to_tensor(par_flat)
     par_len = par_flat.get_shape()[0]
@@ -36,8 +43,10 @@ def fold_par(par_flat):
 
 
 def get_objectives(data):
+    # These cannot be decorated with @tf.function because they need to
+    # be able to return numpy for use in scipy optimize.
     def normal_objective(par_flat, to_numpy=True):
-        lp = -1 * normal_lp(fold_par(par_flat), data) / data['num_obs']
+        lp = -1 * normal_lp(fold_par(par_flat), data)
         print(lp.numpy())
         if to_numpy:
             return lp.numpy()
