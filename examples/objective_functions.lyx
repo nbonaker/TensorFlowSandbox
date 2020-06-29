@@ -122,7 +122,7 @@ f\left(\mu,\sigma,x,w\right) & =\sum_{n}w_{n}\ell\left(x_{n}\vert\mu,\sigma\righ
 \begin_layout Standard
 \begin_inset Formula 
 \begin{align*}
- & \textrm{EM mixture model}\\
+ & \textrm{M step for a mixture model}\\
 x & \in\mathbb{R}^{N}\\
 \mu_{1},...,\mu_{K},\sigma_{1},...,\sigma_{K} & \in\mathbb{R}\\
 \pi & \in\left[0,1\right]^{K}\\

@@ -86,7 +86,7 @@ def get_norm_cluster_params(num_clusters, num_obs):
 # Logistic
 
 def get_logistic_ll_vec(y, x_mat, theta):
-    z = x_mat @ theta
+    z = tf.tensordot(x_mat, theta, axes=1)
     return y * z + tf.math.log1p(z)
 
 def get_logistic_ll(y, x_mat, theta):
